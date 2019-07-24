@@ -1,0 +1,28 @@
+{
+  "deviceTypes": [
+    {
+      "id": "pizza-machine",
+      "running": true,
+      "events": [
+        {
+          "id": "applyPeperonis",
+          "frequency": {
+            "repeat": 20,
+            "every": "minute"
+          },
+          "json": "{\n  \"peperoniArm1\": random(0, 40), \n  \"peperoniArm2\": random(0, 40),\n  \"peperoniArm3\": random(0, 40) \n}\n"
+        }
+      ],
+      "devices": [
+        {
+          "id": "01",
+          "generated": false
+        }
+      ],
+      "managed": {
+        "enabled": false
+      }
+    }
+  ],
+  "APIKey": "a-snpaca-4jcjjs81ye"
+}
