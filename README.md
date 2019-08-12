@@ -24,9 +24,10 @@ ever tools _they_ choose.
 
 #### The Data Source
 
-
 _Prompts: 6,7_
 Todo: stub- divvy bikes.
+
+![Divvy Station at Milwaukee and California](divvy_station.JPG)
 
 Todo: add photo of bike dock
 
@@ -47,12 +48,14 @@ Todo: add photo of bike dock
 }
 ```
 
+Json Sources.
+
 Issues with Strings (what you did to solve)
 
 
 #### Solution Architecture
 
-_Prompts: 5_
+_DONE_
 
 See [1](https://docs.google.com/drawings/d/1ATdY49nh_6BLsk9Qhnsiia80-65SAXJ0qxmmT_YGs-s/edit?usp=sharing)
 for visual diagram.
