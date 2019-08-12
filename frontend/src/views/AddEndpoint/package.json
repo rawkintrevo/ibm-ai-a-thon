@@ -1,0 +1,6 @@
+{
+  "name": "AddEndpoint",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./AddEndpoint.js"
+}

@@ -1,0 +1,130 @@
+package org.rawkintrevo.aiathon
+
+
+import java.util
+import java.util.concurrent.TimeUnit
+import java.util.{ArrayList, HashMap, List, Properties}
+import java.util.regex.{Matcher, Pattern}
+
+import com.google.gson.Gson
+import org.apache.flink.api.common.functions.{MapFunction, RuntimeContext}
+import org.apache.flink.api.common.typeinfo.TypeHint
+import org.apache.flink.api.java.tuple.Tuple2
+import org.apache.flink.streaming.api.datastream.{AsyncDataStream, DataStream, DataStreamSource}
+import org.apache.flink.streaming.api.scala._
+import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows
+import org.apache.flink.streaming.api.windowing.time.Time
+import org.apache.flink.streaming.connectors.elasticsearch.{ElasticsearchSinkFunction, RequestIndexer}
+import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink
+import org.apache.http.HttpHost
+import org.elasticsearch.action.index.IndexRequest
+import org.elasticsearch.client.Requests
+import org.rawkintrevo.aiathon.asyncio.AsyncRestRequest
+import org.rawkintrevo.aiathon.sources.MQTTSource
+import org.rawkintrevo.aiathon.windowfns.ProcessWindowAnalyticsFunction
+
+
+object IoTStream {
+  def main(args: Array[String]) {
+    // set up the streaming execution environment
+    val env = StreamExecutionEnvironment.getExecutionEnvironment
+
+    // Todo Turn these into parameters passed at run time
+    val Org_ID = "snpaca"
+    val App_Id = "org_rawkintrevo_aiathon"
+    val API_Key = "a-snpaca-fvbtgfakg6"
+    val APP_Authentication_Token = "vm+Krw-wff0rgurMoD"
+    val Device_Type = " pizza-machine" //"+";
+    val Device_ID = "01"
+    val EVENT_ID = "applyPeperonis"
+    val ES_HOST_NAME = "elasticsearch.default" // cause k8s
+
+    val mqttProperties = new Properties
+    val clientID = String.format("a:%s:%s", Org_ID, App_Id)
+    val mqttURL = String.format("tcp://%s.messaging.internetofthings.ibmcloud.com:1883", Org_ID)
+    val mqttTopic = "iot-2/type/+/id/+/evt/+/fmt/+"
+
+    mqttProperties.setProperty(MQTTSource.CLIENT_ID, clientID)
+    mqttProperties.setProperty(MQTTSource.URL, mqttURL)
+    mqttProperties.setProperty(MQTTSource.TOPIC, mqttTopic)
+
+    mqttProperties.setProperty(MQTTSource.USERNAME, API_Key)
+    mqttProperties.setProperty(MQTTSource.PASSWORD, APP_Authentication_Token)
+
+    val mqttSource = new MQTTSource(mqttProperties)
+    val iotDataSource: DataStream[String] = env.addSource(mqttSource)
+
+    val tupleStream: DataStream[Tuple2[String,String]] = iotDataSource.map((s: String) => {
+      def foo(s: String): Tuple2[String, String] = { //        DataStream<FlinkRecord> stream = iotDataSource.map((MapFunction<String, FlinkRecord>) s -> {
+        val arrOfS = s.split("\\|")
+        val topic = arrOfS(0)
+        val msgRaw = arrOfS(1)
+        // Process the topic
+        val DEVICE_EVENT_PATTERN = Pattern.compile("iot-2/type/(.+)/id/(.+)/evt/(.+)/fmt/(.+)")
+        val matcher = DEVICE_EVENT_PATTERN.matcher(topic)
+        //            if (!matcher.matches()) { return new FlinkRecord(null, "matcher didn't match"); }
+        if (!matcher.matches) {
+          return new Tuple2[_, _](null, "matcher didn't match")
+        }
+        val `type` = matcher.group(1)
+        val id = matcher.group(2)
+        val event = matcher.group(3)
+        val format = matcher.group(4)
+        // https://static.javadoc.io/com.google.code.gson/gson/2.8.5/com/google/gson/JsonObject.html
+        // https://static.javadoc.io/com.google.code.gson/gson/2.8.5/com/google/gson/JsonElement.html
+        //            return new FlinkRecord(type+"_"+id+"_"+event, msgRaw);
+        new Tuple2[String, String](`type` + "_" + id + "_" + event, msgRaw)
+        //        }).returns(new TypeHint<FlinkRecord>(){});
+      }
+
+      foo(s)
+      }).returns(new TypeHint[Tuple2[String, String]]() {})
+
+    val processedStream: DataStream[String] = tupleStream
+      .keyBy((t: Tuple2[String, String]) => t.f0)
+      .window(SlidingProcessingTimeWindows.of(Time.seconds(30), Time.seconds(5)))
+      .process(new ProcessWindowAnalyticsFunction() )
+
+    val v: String = "2"
+    val INDEX_NAME: String = "pizzamachine_v" + v
+    val DOC_TYPE: String = "pizzarm_v" + v
+
+    val httpHosts: util.List[HttpHost] = new util.ArrayList[HttpHost]
+    httpHosts.add(new HttpHost(ES_HOST_NAME, 9200, "http"))
+
+    val esSinkBuilder: ElasticsearchSink.Builder[String] = new ElasticsearchSink.Builder[String](httpHosts, new ElasticsearchSinkFunction[String]() {
+      def createIndexRequest(element: String): IndexRequest = {
+        val json: util.HashMap[String, Any] = new Gson().fromJson(element.toString, classOf[util.HashMap[_, _]])
+        Requests.indexRequest.index("window_aggs").`type`(DOC_TYPE).source(json)
+      }
+
+      override
+
+      def process(element: String, ctx: RuntimeContext, indexer: RequestIndexer): Unit = {
+        indexer.add(createIndexRequest(element))
+      }
+    })
+
+    val esAllDocsSinkBuilder: ElasticsearchSink.Builder[String] = new ElasticsearchSink.Builder[String](httpHosts, new ElasticsearchSinkFunction[String]() {
+      def createIndexRequest(element: String): IndexRequest = {
+        val json: util.HashMap[String, Any] = new Gson().fromJson(element.toString, classOf[util.HashMap[_, _]])
+        Requests.indexRequest.index("all_docs").`type`(DOC_TYPE).source(json)
+      }
+
+      override
+
+      def process(element: String, ctx: RuntimeContext, indexer: RequestIndexer): Unit = {
+        indexer.add(createIndexRequest(element))
+      }
+    })
+
+    // configuration for the bulk requests; this instructs the sink to emit after every element, otherwise they would be buffered
+    esSinkBuilder.setBulkFlushMaxActions(1)
+
+    val restStream: DataStream[Tuple2[String, String]] = AsyncDataStream.unorderedWait(processedStream, new AsyncRestRequest, 1000, TimeUnit.MILLISECONDS, 100)
+    tupleStream.map((t: Tuple2[String, String]) => t.f1).addSink(esAllDocsSinkBuilder.build) // todo add key here
+
+    processedStream.addSink(esSinkBuilder.build)
+    env.execute("Flink IoT Runtime")
+  }
+}
