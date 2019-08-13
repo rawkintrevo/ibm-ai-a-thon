@@ -1,25 +1,45 @@
 
 This projects needs:
 
--[ ] Github URL which contains
--[ ] AI Model,
+- [ ] Github URL which contains
+- [ ] AI Model,
 -- (predict when a station is going to be 'out of bikes')
 -- Show when station is low and othe nearby stations are low.
--[x] Input data and output results # no input data / output data- that's downloaded and created in R/T from json feed. but you do need to create a local divy shim to run , even though its cheap trash
--[x] UI (if any) and
--[x] a readme to run the code
+- [x] Input data and output results # no input data / output data- that's downloaded and created in R/T from json feed. but you do need to create a local divy shim to run , even though its cheap trash
+- [x] UI (if any) and
+- [x] a readme to run the code
 
-### 'Live' Demo
+## Table of Contents
+
+- 'Live' Demo (and video)
+- Overview and Problem Statement
+- The Divvy Bike Data Source
+- Solution Architecture
+- Merging this Into Current Products
+- Some Example Models
+- Highlights
+- Conclusion
+- Reference
+
+
+## 'Live' Demo
 
 This product is 100% cloud native, and running on Kubernetes. See the "live-demo" at
 http://ai-a-thon.us-south.containers.appdomain.cloud (note, bc IBM's K8s clusters are wicked expensive, this is only "on"
 at certain times. Hopefully there is a demo portion or the judges can let me know and I'll fire it up for y'all to kick the tires)
 
-### Overview / Problem Statement
+## Overview / Problem Statement
 
 _Prompts: 4_
 who will benefit from project (ds are a dime per 3 dozen anymore)
 
+Buzz words: "The journey to being a real-time enterprise."
+"Timely extraction of value from data"
+"Building the real-time enterprise requires new ways to process streams of actionable data"
+"Data engineers face new challenges"
+"Batch processing is not suitable for new challenges"
+"New Standards emerging for DS/Data engineers"
+"Choice is vital"
 Background / problem- The world is moving faster, data scientists are
 becoming cheaper, but WatsonIoT Analtyics is locked in to an archaic
 model.
@@ -30,7 +50,11 @@ client data scientists to deploy and manage their own models using what
 ever tools _they_ choose.
 
 
-#### The Data Source
+## The Data Source
+
+It's important to note, that the data source chosen has little to do with the value proposition of this solution. It is
+designed to be a platform upgrade that can take on multiple datasources. That said, some description of the data you are
+looking at will probably be helpful, so we will include it:
 
 The data set comes from the [City of Chicago's Divvy Bike Program](https://www.divvybikes.com/how-it-works)
 , a bike share program the on the city's north and west sides. There are 580 stations, and over 5000 bikes. The city provides
@@ -63,7 +87,7 @@ we see `station_id` a string, that looks like a numeric. Several integegers, a l
 create a system that could automatically infer schema, this feature was considered low priority and as such you will now
 see that the user must pass the schema as a json when she creates the stream.
 
-#### Solution Architecture
+## Solution Architecture
 
 See [1](https://docs.google.com/drawings/d/1ATdY49nh_6BLsk9Qhnsiia80-65SAXJ0qxmmT_YGs-s/edit?usp=sharing)
 for visual diagram.
@@ -133,7 +157,7 @@ and for each analytics record, each endpoint is called with a json containing
 The responses, as well as the metrics, and original device events are
 all then written to the ElasticSearch sink.
 
-#### Introducing this into Current Products
+## Introducing this into Current Products
 
 **Existing Gap in IBM Products**
 
@@ -155,7 +179,7 @@ is glitchy, and in fact is only mini-batching, which is precisely the
 problem we seek to allieviate with Flink.
 
 
-#### The Example Models
+## The Example Models
 
 _Prompts: 1, 9, 10_
 
@@ -166,7 +190,7 @@ model selection process
 results- here actually talk about how you would train a model in R/T, describe how it is different than batch. and why it is important to look at R/T vs theoretical R/T
 
 
-#### Highlights
+## Highlights
 
 **Cloud Native** The Cloud Native Design of this Applicaiton allows it
 to be deployed _as it_ to IBM Cloud (it actually arleady is deployed to
@@ -185,7 +209,7 @@ to GBS is that they can also devote their time to understanding the problem
 and writing solutions, not to fighting with the systems.
 
 
-#### Analysis
+## Analysis
 
 _Prompts: 2, 8,_
 
@@ -197,7 +221,7 @@ uniqueness of approach, algorithm, methods.
 
 todo: Video Demo
 
-#### Reference
+## Reference
 
 1 - https://docs.google.com/drawings/d/1ATdY49nh_6BLsk9Qhnsiia80-65SAXJ0qxmmT_YGs-s/edit?usp=sharing
 2 - https://github.com/rawkintrevo/ibm-ai-a-thon/tree/master/divvy-shim-cf
