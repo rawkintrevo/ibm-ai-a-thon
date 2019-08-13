@@ -4,6 +4,7 @@ import * as router from 'react-router-dom';
 import { Container } from 'reactstrap';
 
 import MainSideNav from "../MainSideNav"
+import TopNav from "../TopNav"
 
 import routes from '../../routes';
 
@@ -14,6 +15,7 @@ class Layout extends Component {
 	render () {
 		return (
 			<div>
+				<TopNav />
 				<MainSideNav />
 				<main className="main">
           <Container fluid>

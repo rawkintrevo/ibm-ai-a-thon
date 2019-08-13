@@ -12,6 +12,7 @@ import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.AsyncDataStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -44,19 +45,18 @@ public class DeviceDataAnalysis {
 
 
     public static void main(String[] args) throws Exception {
+        ParameterTool parameter = ParameterTool.fromArgs(args);
+
         Logger LOG = LoggerFactory.getLogger(DeviceDataAnalysis.class);
-        String Org_ID = "snpaca";
-        String App_Id = "org_rawkintrevo_aiathon";
-        String API_Key = "a-snpaca-fvbtgfakg6";
-        String APP_Authentication_Token = "vm+Krw-wff0rgurMoD";
-        String ES_HOST_NAME = "elasticsearch.default"; // cause k8s
-        String v = "2";
-        String INDEX_NAME = "pizzamachine_v" + v;
-        String DOC_TYPE = "pizzarm_v"  + v;
+        String Org_ID = parameter.getRequired("orgid"); // somethign like snpaca
+        String App_Id = parameter.getRequired("appid"); // some name for your app
+        String API_Key = parameter.getRequired("apikey"); // "a-snpaca-fvbtgfakg6";
+        String APP_Authentication_Token = parameter.getRequired("authtoken"); //"vm+Krw-wff0rgurMoD";
+        String ES_HOST_NAME = parameter.getRequired("esurl"); // "elasticsearch.default"; // cause k8s
+        final String ENDPOINT_URL = parameter.getRequired("endpointurl"); // "https://a5056918.us-south.apiconnect.appdomain.cloud/aiathon/endpointserver";
 
-
-        final String ENDPOINT_URL = "https://a5056918.us-south.apiconnect.appdomain.cloud/aiathon/endpointserver";
-
+        // --orgid dwbsnh  --appid org_rawkintrevo_aiathon --apikey a-dwbsnh-s06bdobyc6 --authtoken i2e0OyhT*HHxx&7OOa --esurl ai-a-thon.us-south.containers.appdomain.cloud --endpointurl https://a5056918.us-south.apiconnect.appdomain.cloud/aiathon/endpointserver
+        // Todo: this should also be a paramter
         final String schemaJson = "{'eightd_has_available_keys': Bool,\n" +
                 " 'shim-dt': 'String',\n" +
                 " 'eightd_active_station_services': 'String',\n" +
@@ -243,8 +243,8 @@ public class DeviceDataAnalysis {
                         HashMap<String, Object> json = new Gson().fromJson(element.toString(), HashMap.class);
 
                         return Requests.indexRequest()
-                                .index("window_aggs")
-                                .type(DOC_TYPE)
+                                .index("analytics")
+                                .type("window-analytics")
                                 .source(json);
                     }
 

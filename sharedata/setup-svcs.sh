@@ -37,8 +37,16 @@ echo "Setting up Elasticsearch"
 #  elasticsearchRef:
 #    name: aiathon
 #EOF
-kubectl run elasticsearch --image=docker.elastic.co/elasticsearch/elasticsearch:6.8.1 --env="discovery.type=single-node" --port=9200
+
+
+#kubectl run elasticsearch --image=docker.elastic.co/elasticsearch/elasticsearch:6.8.1 --env="discovery.type=single-node" --port=9200
+# ^ doesn't work in IBM, but this hack does.
+kubectl run elasticsearch --image=docker.elastic.co/elasticsearch/elasticsearch:6.8.1 --port=9200 -- elasticsearch -E discovery.type=single-node
 kubectl expose deployment/elasticsearch --type=LoadBalancer
+
+
+helm repo add elastic https://helm.elastic.co
+helm install --name elasticsearch elastic/elasticsearch
 
 kubectl run kibana --image=docker.elastic.co/kibana/kibana:6.8.1 \
   --port=5601 \
@@ -69,3 +77,6 @@ echo "put a check loop here for 'Running' in kubectl get pods | grep aiathon-kib
 #    imagePullPolicy: IfNotPresent
 #  restartPolicy: Always
 #EOF
+
+kubectl apply -f sharedata/frontend/my-frontend.yaml
+kubectl expose deployment/my-frontend

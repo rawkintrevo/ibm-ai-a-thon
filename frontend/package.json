@@ -22,8 +22,9 @@
     "carbon-components-react": "^7.4.1",
     "dotenv": "^8.0.0",
     "react": "^16.8.6",
+    "react-bootstrap": "^1.0.0-beta.11",
     "react-dom": "^16.8.6",
-
+    "react-router-dom": "^5.0.1",
     "react-scripts": "2.1.8",
     "reactstrap": "^8.0.1"
   },
@@ -43,7 +44,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-frontend
+spec:
+  selector:
+    matchLabels:
+      run: my-frontend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: my-frontend
+    spec:
+      containers:
+        - name: my-frontend
+          image: rawkintrevo/ai-a-thon-web-app
+          ports:
+            - containerPort: 80

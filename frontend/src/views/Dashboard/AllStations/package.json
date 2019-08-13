@@ -1,0 +1,6 @@
+{
+  "name": "AllStations",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./AllStations.js"
+}

@@ -3,19 +3,23 @@ from requests import get
 from wiotp.sdk.api.registry.devices import DeviceCreateRequest
 from wiotp.sdk.application import ApplicationClient
 
+## Remember to add Divvy Device Type first!
+
 r = get("https://gbfs.divvybikes.com/gbfs/gbfs.json")
 feeds = r.json()['data']['en']['feeds']
 
-orgId = "snpaca"
+orgId = "dwbsnh"
 typeId = "divvyBike"
+range_start = 50
+range_end = 53
 
-stations = get(feeds[3]['url']).json()['data']['stations']
+stations = get(feeds[3]['url']).json()['data']['stations'][range_start:range_end]
 
 
 myConfig = {
     "identity": {"appId": "Divvy Shim"},
-    "auth" : { "key": "a-snpaca-ebawmcz3mh",
-               "token": "*2_sGnoMfI?FJ*0r(B"
+    "auth" : { "key": "a-dwbsnh-s06bdobyc6",
+               "token": "i2e0OyhT*HHxx&7OOa"
                }
 }
 

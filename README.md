@@ -1,11 +1,19 @@
 
 This projects needs:
 
-[ ] Github URL which contains
-[ ] AI Model,
-[ ] Input data and output results # no input data / output data- that's downloaded and created in R/T from json feed. but you do need to create a local divy shim to run , even though its cheap trash
-[ ] UI (if any) and
-[ ] a readme to run the code
+-[ ] Github URL which contains
+-[ ] AI Model,
+-- (predict when a station is going to be 'out of bikes')
+-- Show when station is low and othe nearby stations are low.
+-[x] Input data and output results # no input data / output data- that's downloaded and created in R/T from json feed. but you do need to create a local divy shim to run , even though its cheap trash
+-[x] UI (if any) and
+-[x] a readme to run the code
+
+### 'Live' Demo
+
+This product is 100% cloud native, and running on Kubernetes. See the "live-demo" at
+http://ai-a-thon.us-south.containers.appdomain.cloud (note, bc IBM's K8s clusters are wicked expensive, this is only "on"
+at certain times. Hopefully there is a demo portion or the judges can let me know and I'll fire it up for y'all to kick the tires)
 
 ### Overview / Problem Statement
 
@@ -24,14 +32,16 @@ ever tools _they_ choose.
 
 #### The Data Source
 
-_Prompts: 6,7_
-Todo: stub- divvy bikes.
+The data set comes from the [City of Chicago's Divvy Bike Program](https://www.divvybikes.com/how-it-works)
+, a bike share program the on the city's north and west sides. There are 580 stations, and over 5000 bikes. The city provides
+near real time data on the status of each station, and makes this data available for public consumption.
 
 ![Divvy Station at Milwaukee and California](divvy_station.JPG)
 
-Todo: add photo of bike dock
+All of the data available for consumption can be found [here](https://www.divvybikes.com/system-data) however, we are focusing
+on `station_status` because of the real time endpoints, it has the most variablility. [link](https://gbfs.divvybikes.com/gbfs/en/station_status.json)
 
-[link](https://gbfs.divvybikes.com/gbfs/en/station_status.json)
+An example record we get back from this endpoint follows.
 
 ```json
 {   "station_id":"68",
@@ -48,14 +58,12 @@ Todo: add photo of bike dock
 }
 ```
 
-Json Sources.
-
-Issues with Strings (what you did to solve)
-
+One of the major issues we ran into when moving from synthetic data to "real world" data was type safety.  If our record,
+we see `station_id` a string, that looks like a numeric. Several integegers, a long, and a boolean.  While we wanted to
+create a system that could automatically infer schema, this feature was considered low priority and as such you will now
+see that the user must pass the schema as a json when she creates the stream.
 
 #### Solution Architecture
-
-_DONE_
 
 See [1](https://docs.google.com/drawings/d/1ATdY49nh_6BLsk9Qhnsiia80-65SAXJ0qxmmT_YGs-s/edit?usp=sharing)
 for visual diagram.
@@ -68,7 +76,7 @@ The main components of this solution are
 - Cloud Foundry (only for the Divvy -> Watson IoT-P shim, not a core component)
 
 Additionally, the WebUI uses the following components.
-- CloudFoundry (IBMCloud)
+- ~~CloudFoundry (IBMCloud)~~ Kubernetes now.
 - React
 - Carbon
 

@@ -91,8 +91,10 @@ class AsyncPingModels extends AsyncFunction[Tuple4[String,String, String, String
         case result: String => {
           val resultJson = new Gson().fromJson(result, classOf[JsonObject]);
           val outputJson = new JsonObject();
-          outputJson.addProperty("analytics", lastAnalyticsStr);
-          outputJson.addProperty("devicedata", deviceDataStr)
+          val analyticsJson = new Gson().fromJson(lastAnalyticsStr, classOf[JsonObject])
+          val deviceDataJson = new Gson().fromJson(deviceDataStr, classOf[JsonObject])
+          outputJson.add("analytics", analyticsJson);
+          outputJson.add("devicedata", deviceDataJson)
           outputJson.add(model_name + "_results", resultJson)
           resultFuture.complete(Iterable(new Tuple2(deviceIdStr, outputJson.toString)).asJavaCollection)
         };

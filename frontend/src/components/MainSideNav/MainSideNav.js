@@ -23,8 +23,8 @@ class MainSideNav extends Component {
 	    >
 	      <SideNavItems>
 	        <SideNavMenu title="Dashboard">
-	          <SideNavMenuItem href="javascript:void(0)">
-	            Dashboard 1
+	          <SideNavMenuItem href="/dashboard/allstations">
+	            All Stations
 	          </SideNavMenuItem>
 	          <SideNavMenuItem href="javascript:void(0)"> {/* aria-current="page" add this for selected page. */}
 	            Dashboard 2

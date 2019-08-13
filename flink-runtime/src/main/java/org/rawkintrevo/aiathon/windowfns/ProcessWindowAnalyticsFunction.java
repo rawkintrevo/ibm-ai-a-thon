@@ -11,6 +11,8 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -103,6 +105,8 @@ public class ProcessWindowAnalyticsFunction
         outputJson.addProperty("devicetype", key.split("_")[0]);
         outputJson.addProperty("id", key.split("_")[1]);
         outputJson.addProperty("event", key.split("_")[2]);
+        String nowDt = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+        outputJson.addProperty("windowclose date", nowDt);
         // todo stdev
 
 //        String jsonStr = gsonObj.toJson(outputMaxMap);
