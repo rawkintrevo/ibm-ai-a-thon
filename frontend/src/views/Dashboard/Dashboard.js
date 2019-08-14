@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 class Dashboard extends Component {
 
 	render () {
+		console.log("dashboard!")
 		return (
 			<div>
-				foo
+				Nothing here yet- check back later
 			</div>
 		)
 	}

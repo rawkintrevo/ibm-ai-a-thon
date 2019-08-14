@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 import {
-  Content,
+
   SideNav,
   SideNavItems,
   SideNavLink,
@@ -18,30 +18,31 @@ class MainSideNav extends Component {
 			<SideNav
 	      isFixedNav
 	      expanded={true}
+
 	      isChildOfHeader={false}
 	      aria-label="Side navigation"
 	    >
 	      <SideNavItems>
-	        <SideNavMenu title="Dashboard">
-	          <SideNavMenuItem href="/dashboard/allstations">
-	            All Stations
+	        <SideNavMenu title="Under The Hood">
+	          <SideNavMenuItem href="#/underhood/kibana">
+	            Kibana Dashboard
 	          </SideNavMenuItem>
-	          <SideNavMenuItem href="javascript:void(0)"> {/* aria-current="page" add this for selected page. */}
-	            Dashboard 2
+	          <SideNavMenuItem href="#/dashboard/dashboard"> {/* aria-current="page" add this for selected page. */}
+	            Dashboard
 	          </SideNavMenuItem>
-	          <SideNavMenuItem href="javascript:void(0)">
+	          <SideNavMenuItem href="/">
 	            Dashboard 3
 	          </SideNavMenuItem>
 	        </SideNavMenu>
 	        <SideNavMenu title="Models">
-	          <SideNavMenuItem href="javascript:void(0)">
+	          <SideNavMenuItem href="/">
 	            See Current Model Endpoints
 	          </SideNavMenuItem>
-	          <SideNavMenuItem href="javascript:void(0)"> {/* aria-current="page" */}
+	          <SideNavMenuItem href="#/add/endpoint"> {/* aria-current="page" */}
 	            Add New Model Endpoint
 	          </SideNavMenuItem>
 	        </SideNavMenu>
-	        <SideNavLink href="javascript:void(0)">Create New Stream</SideNavLink>
+	        <SideNavLink href="/">Create New Stream</SideNavLink>
 	        <SideNavLink href="https://github.ibm.com/trevor-grant/ibm-ai-a-thon">Github Source Code</SideNavLink>
 	      </SideNavItems>
 	    </SideNav>

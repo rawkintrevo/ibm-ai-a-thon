@@ -44,15 +44,13 @@ echo "Setting up Elasticsearch"
 kubectl run elasticsearch --image=docker.elastic.co/elasticsearch/elasticsearch:6.8.1 --port=9200 -- elasticsearch -E discovery.type=single-node
 kubectl expose deployment/elasticsearch --type=LoadBalancer
 
-
-helm repo add elastic https://helm.elastic.co
-helm install --name elasticsearch elastic/elasticsearch
-
+echo "setting up kibana"
 kubectl run kibana --image=docker.elastic.co/kibana/kibana:6.8.1 \
   --port=5601 \
   --env="PUBLISH_HOST=kibana.default" \
-  --env="SERVER_HOST=0.0.0.0" \
-  --env="SERVER_BASEPATH=/api/v1/namespaces/default/services/kibana:5601/proxy"
+  --env="SERVER_HOST=0.0.0.0"
+#  --env="PUBLISH_HOST=kibana.default" \
+#  --env="SERVER_BASEPATH=/api/v1/namespaces/default/services/kibana:5601/proxy"
 
 kubectl expose deployment/kibana # --type=LoadBalancer
 
@@ -78,5 +76,11 @@ echo "put a check loop here for 'Running' in kubectl get pods | grep aiathon-kib
 #  restartPolicy: Always
 #EOF
 
+echo "Creating WebUI"
 kubectl apply -f sharedata/frontend/my-frontend.yaml
 kubectl expose deployment/my-frontend
+
+echo "Creating Ingress"
+kubectl apply -f sharedata/frontend/myingress.yaml
+kubectl apply -f sharedata/frontend/myingress2.yaml
+kubectl apply -f sharedata/frontend/myingress3.yaml

@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import { Button } from 'carbon-components-react';
 
 import Layout from "./components/Layout"
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-				<Layout />
-
-
-      </div>
+      <HashRouter>
+        <Switch>
+          <Route path="/" name="Home" render={ props => <Layout {...props}/>}/>
+        </Switch>
+      </HashRouter>
     );
   }
 }

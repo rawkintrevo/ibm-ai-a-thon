@@ -1,14 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: wwwingressresource
+  name: esingressresource
 spec:
   rules:
     # ibmcloud ks cluster-get --cluster ai-a-thon | grep Ingress
-    - host: www.ai-a-thon.us-south.containers.appdomain.cloud
+    - host: es.ai-a-thon.us-south.containers.appdomain.cloud
       http:
         paths:
           - path: /
             backend:
-              serviceName: my-frontend
-              servicePort: 80
+              serviceName: elasticsearch
+              servicePort: 9200

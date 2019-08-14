@@ -1,7 +1,7 @@
 
 This projects needs:
 
-- [ ] Github URL which contains
+- [x] Github URL which contains
 - [ ] AI Model,
 -- (predict when a station is going to be 'out of bikes')
 -- Show when station is low and othe nearby stations are low.

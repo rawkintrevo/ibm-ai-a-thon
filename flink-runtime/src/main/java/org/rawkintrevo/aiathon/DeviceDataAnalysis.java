@@ -55,7 +55,7 @@ public class DeviceDataAnalysis {
         String ES_HOST_NAME = parameter.getRequired("esurl"); // "elasticsearch.default"; // cause k8s
         final String ENDPOINT_URL = parameter.getRequired("endpointurl"); // "https://a5056918.us-south.apiconnect.appdomain.cloud/aiathon/endpointserver";
 
-        // --orgid dwbsnh  --appid org_rawkintrevo_aiathon --apikey a-dwbsnh-s06bdobyc6 --authtoken i2e0OyhT*HHxx&7OOa --esurl ai-a-thon.us-south.containers.appdomain.cloud --endpointurl https://a5056918.us-south.apiconnect.appdomain.cloud/aiathon/endpointserver
+        // --orgid dwbsnh  --appid org_rawkintrevo_aiathon --apikey a-dwbsnh-s06bdobyc6 --authtoken i2e0OyhT*HHxx&7OOa --esurl es.ai-a-thon.us-south.containers.appdomain.cloud --endpointurl https://a5056918.us-south.apiconnect.appdomain.cloud/aiathon/endpointserver
         // Todo: this should also be a paramter
         final String schemaJson = "{'eightd_has_available_keys': Bool,\n" +
                 " 'shim-dt': 'String',\n" +
