@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: flinkingressresource
+  annotations:
+    ingress.bluemix.net/client-max-body-size: "serviceName=flink-jobmanager size=0; size=0"
+spec:
+  rules:
+    # ibmcloud ks cluster-get --cluster ai-a-thon | grep Ingress
+    - host: flink.ai-a-thon.us-south.containers.appdomain.cloud
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: flink-jobmanager
+              servicePort: 8081

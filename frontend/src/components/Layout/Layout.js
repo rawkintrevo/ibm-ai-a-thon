@@ -20,15 +20,15 @@ class Layout extends Component {
           <div className="bx--grid">
             <div className="bx--row">
               <section className="bx--offset-lg-2 bx--col-lg-13">
-                <h2
-                  style={{
-                    fontWeight: "800",
-                    margin: "30px 0",
-                    fontSize: "20px"
-                  }}
-                >
-                  Purpose and function
-                </h2>
+								 <h2
+                                  style={{
+                                    fontWeight: "800",
+                                    margin: "15px 0",
+                                    fontSize: "20px"
+                                  }}
+                                >
+                                  &nbsp;
+                                </h2>
                 <Suspense fallback={this.loading()}>
                       <Switch>
                         {routes.map((route, idx) => {

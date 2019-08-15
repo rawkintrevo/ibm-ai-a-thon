@@ -38,7 +38,8 @@ def eventPublishCallback():
 activeIds = deviceCli.keys()
 
 station_status_url = [d['url'] for d in feeds if d['name']=='station_status'][0]
-for i in range(0,20):
+# for i in range(0,20):
+while True:
     loop_sp = datetime.now()
     station_data = get(station_status_url).json()['data']['stations']
     for d in station_data:

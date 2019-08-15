@@ -25,5 +25,7 @@ spec:
             - containerPort: 8081
               name: ui
           env:
+            - name: SERVER_MAX_CONTENT_LENGTH
+              value:
             - name: JOB_MANAGER_RPC_ADDRESS
               value: flink-jobmanager

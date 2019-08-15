@@ -231,7 +231,7 @@ public class DeviceDataAnalysis {
                 new AsyncPingModels(),
                 30,
                 TimeUnit.SECONDS,
-                100);
+                50);
 
         List<HttpHost> httpHosts = new ArrayList<>();
         httpHosts.add(new HttpHost(ES_HOST_NAME, 9200, "http"));

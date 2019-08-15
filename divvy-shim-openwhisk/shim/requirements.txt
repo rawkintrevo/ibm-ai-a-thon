@@ -1,0 +1,2 @@
+wiotp-sdk==0.9.5
+requests==2.22.0

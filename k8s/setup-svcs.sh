@@ -1,14 +1,15 @@
+#!/usr/bin/env bash
 ##!/usr/bin/env bash
 
 
 echo "Setting up Flink"
 # wget these? edit these?
 # https://ci.apache.org/projects/flink/flink-docs-stable/ops/deployment/kubernetes.html
-kubectl create -f sharedata/flink/jobmanager-service.yaml
-kubectl create -f sharedata/flink/jobmanager-deployment.yaml
-kubectl create -f sharedata/flink/taskmanager-deployment.yaml
+kubectl create -f k8s/flink/jobmanager-service.yaml
+kubectl create -f k8s/flink/jobmanager-deployment.yaml
+kubectl create -f k8s/flink/taskmanager-deployment.yaml
 # Run kubectl proxy in a terminal
-echo "Navigate to http://<EXTERNAL IP>>:8001/api/v1/namespaces/default/services/flink-jobmanager:ui/proxy in your browser" >> sharedata/dashboard.txt
+echo "Navigate to http://<EXTERNAL IP>>:8001/api/v1/namespaces/default/services/flink-jobmanager:ui/proxy in your browser" >> k8s/dashboard.txt
 # https://www.elastic.co/elasticsearch-kubernetes
 echo "Setting up Elasticsearch"
 #kubectl apply -f https://download.elastic.co/downloads/eck/0.8.1/all-in-one.yaml
@@ -77,10 +78,16 @@ echo "put a check loop here for 'Running' in kubectl get pods | grep aiathon-kib
 #EOF
 
 echo "Creating WebUI"
-kubectl apply -f sharedata/frontend/my-frontend.yaml
+kubectl apply -f k8s/frontend/my-frontend.yaml
 kubectl expose deployment/my-frontend
 
 echo "Creating Ingress"
-kubectl apply -f sharedata/frontend/myingress.yaml
-kubectl apply -f sharedata/frontend/myingress2.yaml
-kubectl apply -f sharedata/frontend/myingress3.yaml
+kubectl apply -f k8s/frontend/myingress.yaml
+kubectl apply -f k8s/frontend/myingress2.yaml
+kubectl apply -f k8s/frontend/myingress3.yaml
+kubectl apply -f k8s/frontend/myingress4.yaml
+
+kubectl exec -it flink-jobmanager-c84568b5d-l82zk -- bash
+echo "rest.server.max-content-length: 209715200" >> conf/flink-conf.yaml
+jobmanager.sh start-foreground jobmanager
+curl -X POST -H "Expect:" -F "jarfile=@/flink-runtime/target/flink-runtime-1.0-SNAPSHOT.jar" http://flink.ai-a-thon.us-south.containers.appdomain.cloud/jars/upload

@@ -27,22 +27,23 @@ class MainSideNav extends Component {
 	          <SideNavMenuItem href="#/underhood/kibana">
 	            Kibana Dashboard
 	          </SideNavMenuItem>
-	          <SideNavMenuItem href="#/dashboard/dashboard"> {/* aria-current="page" add this for selected page. */}
-	            Dashboard
+	          <SideNavMenuItem href="#/underhood/flink"> {/* aria-current="page" add this for selected page. */}
+	            Flink WebUI
 	          </SideNavMenuItem>
-	          <SideNavMenuItem href="/">
-	            Dashboard 3
+	          <SideNavMenuItem href="#/divvyshim">
+	            Pump Divvy Data
 	          </SideNavMenuItem>
 	        </SideNavMenu>
 	        <SideNavMenu title="Models">
-	          <SideNavMenuItem href="/">
+	          <SideNavMenuItem href="#/model/endpoints">
 	            See Current Model Endpoints
 	          </SideNavMenuItem>
 	          <SideNavMenuItem href="#/add/endpoint"> {/* aria-current="page" */}
 	            Add New Model Endpoint
 	          </SideNavMenuItem>
 	        </SideNavMenu>
-	        <SideNavLink href="/">Create New Stream</SideNavLink>
+
+	        <SideNavLink disabled>Create New Stream (disabled)</SideNavLink>
 	        <SideNavLink href="https://github.ibm.com/trevor-grant/ibm-ai-a-thon">Github Source Code</SideNavLink>
 	      </SideNavItems>
 	    </SideNav>

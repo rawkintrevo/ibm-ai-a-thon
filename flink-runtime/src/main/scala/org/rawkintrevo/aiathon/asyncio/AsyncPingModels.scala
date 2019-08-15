@@ -18,6 +18,12 @@ class AsyncPingModels extends AsyncFunction[Tuple4[String,String, String, String
 
   implicit lazy val executor: ExecutionContext = ExecutionContext.fromExecutor(Executors.directExecutor())
 
+  override def timeout(input: Tuple4[String, String, String, String], resultFuture: ResultFuture[Tuple2[String, String]]): Unit = {
+
+    val LOG = LoggerFactory.getLogger(classOf[AsyncPingModels])
+    LOG.info("failed to get response..." + input.toString)
+  }
+
   override def asyncInvoke(input: Tuple4[String,String, String, String],
                            resultFuture: ResultFuture[Tuple2[String, String]]): Unit = {
 

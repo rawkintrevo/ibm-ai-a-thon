@@ -16,7 +16,7 @@ This projects needs:
 - The Divvy Bike Data Source
 - Solution Architecture
 - Merging this Into Current Products
-- Some Example Models
+- Modeling Real Time and AIoT
 - Highlights
 - Conclusion
 - Reference
@@ -27,6 +27,9 @@ This projects needs:
 This product is 100% cloud native, and running on Kubernetes. See the "live-demo" at
 http://ai-a-thon.us-south.containers.appdomain.cloud (note, bc IBM's K8s clusters are wicked expensive, this is only "on"
 at certain times. Hopefully there is a demo portion or the judges can let me know and I'll fire it up for y'all to kick the tires)
+
+Video:
+<iframe width="1280" height="720" src="https://www.youtube.com/embed/EKzv1YGukEk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Overview / Problem Statement
 
@@ -89,8 +92,12 @@ see that the user must pass the schema as a json when she creates the stream.
 
 ## Solution Architecture
 
-See [1](https://docs.google.com/drawings/d/1ATdY49nh_6BLsk9Qhnsiia80-65SAXJ0qxmmT_YGs-s/edit?usp=sharing)
-for visual diagram.
+
+<img src="https://docs.google.com/drawings/d/e/2PACX-1vTHXbdxy7vG23LWQNHc7WJ-0XMsreRinnKpy1Y1hKQIbgI4d_wZI5J_FflhERAvIiw2C-RSqJ-N6XLV/pub?w=960&amp;h=1920">
+<figcaption><center>Figure _n_: Architecture Diagram of Current and Planned Components.</center></figcaption>
+
+<p></p>
+
 
 The main components of this solution are
 - WatsonIoT Platform (MQTT - IBMCloud)
@@ -179,7 +186,9 @@ is glitchy, and in fact is only mini-batching, which is precisely the
 problem we seek to allieviate with Flink.
 
 
-## The Example Models
+## Modeling Real Time and AIoT
+
+Talk about AIoT, Kappa Architecture, how this is framework for both. 
 
 _Prompts: 1, 9, 10_
 
