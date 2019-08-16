@@ -25,7 +25,7 @@ This projects needs:
 ## 'Live' Demo
 
 This product is 100% cloud native, and running on Kubernetes. See the "live-demo" at
-http://ai-a-thon.us-south.containers.appdomain.cloud (note, bc IBM's K8s clusters are wicked expensive, this is only "on"
+http://www.ai-a-thon.us-south.containers.appdomain.cloud (note, bc IBM's K8s clusters are wicked expensive, this is only "on"
 at certain times. Hopefully there is a demo portion or the judges can let me know and I'll fire it up for y'all to kick the tires)
 
 Video:
