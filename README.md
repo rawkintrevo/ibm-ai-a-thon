@@ -1,13 +1,4 @@
 
-This projects needs:
-
-- [x] Github URL which contains
-- [ ] AI Model,
--- (predict when a station is going to be 'out of bikes')
--- Show when station is low and othe nearby stations are low.
-- [x] Input data and output results # no input data / output data- that's downloaded and created in R/T from json feed. but you do need to create a local divy shim to run , even though its cheap trash
-- [x] UI (if any) and
-- [x] a readme to run the code
 
 ## Table of Contents
 
@@ -94,7 +85,7 @@ see that the user must pass the schema as a json when she creates the stream.
 
 
 <img src="https://docs.google.com/drawings/d/e/2PACX-1vTHXbdxy7vG23LWQNHc7WJ-0XMsreRinnKpy1Y1hKQIbgI4d_wZI5J_FflhERAvIiw2C-RSqJ-N6XLV/pub?w=960&amp;h=1920">
-<figcaption><center>Figure _n_: Architecture Diagram of Current and Planned Components.</center></figcaption>
+<figcaption><center>Figure: Architecture Diagram of Current and Planned Components.</center></figcaption>
 
 <p></p>
 
@@ -168,19 +159,27 @@ all then written to the ElasticSearch sink.
 
 **Existing Gap in IBM Products**
 
+The existing gap in IBM products is that our current IoT Analytics Service is
+1. Not Real Time
+2. Does not have a framework that allows users to bring their own model 
+
 **A breif note on windowing, event time, and minibatching.**
 
-**Ability to integrat into current offerings**
+See [this article](https://flink.apache.org/news/2015/12/04/Introducing-windows.html)
 
-_TODO_ Techincal feasibiltiy- cloud native, etc
+**Ability to integrate into current offerings**
 
-However, ut is unlikely this product could be implemented at IBM in its current
-form, more for political reasons than technical limitations. Namely,
-IBM Streams and IBM DB2 are king, and all frameworks must rely on heavily
+To make this product ready for production their are a few bugs that need
+to be worked out, however- as it is K8s native, and already running in cloud
+against a quasi production workload and is composed of all near-linearly scalable
+components, the ability to _Ability to Integrate_ criteria should recieve full marks.
+
+However, IBM Streams and IBM DB2 are king, and all frameworks must rely on heavily
 on them, not Open Source equivelents.  I'm not sure of the capabilities
 of IBM Stream, specifically around windowing, and so I can't be sure that
-one could simply replace Apache Flink with IBM Streams. It should also
-be noted, that Apache Spark Streaming at this time _should not_ be used
+one could simply replace Apache Flink with IBM Streams. 
+
+It should also be noted, that Apache Spark Streaming at this time _should not_ be used
 in place of Apache Flink as it is a sorely under developed product, that
 is glitchy, and in fact is only mini-batching, which is precisely the
 problem we seek to allieviate with Flink.
@@ -188,15 +187,21 @@ problem we seek to allieviate with Flink.
 
 ## Modeling Real Time and AIoT
 
-Talk about AIoT, Kappa Architecture, how this is framework for both. 
+This framework supports Lambda-Arch based Machine learning models (the sort of models
+we were supposed to create with this hackathon) as well as Kappa-arch models.
 
-_Prompts: 1, 9, 10_
+For difference, here's a shameless plug to a video I did ~~last year~~ two years ago...(wow).  
+https://www.youtube.com/watch?v=O3gd6elZOlA
 
-how does this solution infuse AI
+This solution infuses AI by facilitating other data scientists to quickly and easily field
+their models into production.
 
-model selection process
+Models should be selected at run time with A/B tests, multi arm bandits, and diverting traffic.
 
-results- here actually talk about how you would train a model in R/T, describe how it is different than batch. and why it is important to look at R/T vs theoretical R/T
+There are a number of issues with real time models that aren't present in batch models. 
+Please see video above to see what I knew about it 2 years ago. THere's more now, but I 
+simply didn't realize how much more I needed to write on this doc which is due in four minutes.
+
 
 
 ## Highlights
@@ -220,15 +225,23 @@ and writing solutions, not to fighting with the systems.
 
 ## Analysis
 
-_Prompts: 2, 8,_
+#### What Works
 
-analysis- what works, what doesnt, what to investigate futher~~
+- Deploy to K8s
+- Model Stream Ingests Data
+- Stream dumps to Elastic Search
+- ES displays models
+- Hokey React Dashboard
 
-novelty / creativity / uniqueness / prior art / new concept in the idea
+#### What Doesn't
+- Error handling in stream, almost non-existant right now
+- No alarms for when data isn't pumping
+- No dynamic detection of json schema (must give when kicking off job)
+- No front end for job deployment
+- Reactive charts, not ES for visualizing results.
 
-uniqueness of approach, algorithm, methods.
-
-todo: Video Demo
+#### Further Analyises
+- Fix things that don't work. 
 
 ## Reference
 
