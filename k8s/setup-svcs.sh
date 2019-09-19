@@ -3,7 +3,6 @@
 
 
 echo "Setting up Flink"
-# wget these? edit these?
 # https://ci.apache.org/projects/flink/flink-docs-stable/ops/deployment/kubernetes.html
 kubectl create -f k8s/flink/jobmanager-service.yaml
 kubectl create -f k8s/flink/jobmanager-deployment.yaml
@@ -12,36 +11,6 @@ kubectl create -f k8s/flink/taskmanager-deployment.yaml
 echo "Navigate to http://<EXTERNAL IP>>:8001/api/v1/namespaces/default/services/flink-jobmanager:ui/proxy in your browser" >> k8s/dashboard.txt
 # https://www.elastic.co/elasticsearch-kubernetes
 echo "Setting up Elasticsearch"
-#kubectl apply -f https://download.elastic.co/downloads/eck/0.8.1/all-in-one.yaml
-#cat <<EOF | kubectl apply -f -
-#apiVersion: elasticsearch.k8s.elastic.co/v1alpha1
-#kind: Elasticsearch
-#metadata:
-#  name: aiathon
-#spec:
-#  version: 6.8.1
-#  nodes:
-#  - nodeCount: 1
-#    config:
-#      node.master: true
-#      node.data: true
-#      node.ingest: true
-#EOF
-#cat <<EOF | kubectl apply -f -
-#apiVersion: kibana.k8s.elastic.co/v1alpha1
-#kind: Kibana
-#metadata:
-#  name: aiathon
-#spec:
-#  version: 6.8.1
-#  nodeCount: 1
-#  elasticsearchRef:
-#    name: aiathon
-#EOF
-
-
-#kubectl run elasticsearch --image=docker.elastic.co/elasticsearch/elasticsearch:6.8.1 --env="discovery.type=single-node" --port=9200
-# ^ doesn't work in IBM, but this hack does.
 kubectl run elasticsearch --image=docker.elastic.co/elasticsearch/elasticsearch:6.8.1 --port=9200 -- elasticsearch -E discovery.type=single-node
 kubectl expose deployment/elasticsearch --type=LoadBalancer
 
@@ -50,8 +19,6 @@ kubectl run kibana --image=docker.elastic.co/kibana/kibana:6.8.1 \
   --port=5601 \
   --env="PUBLISH_HOST=kibana.default" \
   --env="SERVER_HOST=0.0.0.0"
-#  --env="PUBLISH_HOST=kibana.default" \
-#  --env="SERVER_BASEPATH=/api/v1/namespaces/default/services/kibana:5601/proxy"
 
 kubectl expose deployment/kibana # --type=LoadBalancer
 
