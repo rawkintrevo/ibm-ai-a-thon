@@ -49,12 +49,9 @@ kubectl apply -f k8s/frontend/my-frontend.yaml
 kubectl expose deployment/my-frontend
 
 echo "Creating Ingress"
-kubectl apply -f k8s/frontend/myingress.yaml
-kubectl apply -f k8s/frontend/myingress2.yaml
-kubectl apply -f k8s/frontend/myingress3.yaml
-kubectl apply -f k8s/frontend/myingress4.yaml
+kubectl apply -f k8s/frontend/myingress.yaml --validate=false
+kubectl apply -f k8s/frontend/myingress2.yaml --validate=false
+kubectl apply -f k8s/frontend/myingress3.yaml --validate=false
+kubectl apply -f k8s/frontend/myingress4.yaml --validate=false
 
-kubectl exec -it flink-jobmanager-c84568b5d-l82zk -- bash
-echo "rest.server.max-content-length: 209715200" >> conf/flink-conf.yaml
-jobmanager.sh start-foreground jobmanager
 curl -X POST -H "Expect:" -F "jarfile=@/flink-runtime/target/flink-runtime-1.0-SNAPSHOT.jar" http://flink.ai-a-thon.us-south.containers.appdomain.cloud/jars/upload
